@@ -6,5 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(SDL2 REQUIRED)
 
-add_executable(wireframe main.cpp)
+add_executable(wireframe
+    src/main.cpp
+    src/renderer.h
+)
 target_link_libraries(wireframe PRIVATE SDL2::SDL2)
