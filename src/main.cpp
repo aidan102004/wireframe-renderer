@@ -10,7 +10,7 @@ int main() {
     while (running) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            if (e.type = SDL_QUIT) running = false;
+            if (e.type == SDL_QUIT) running = false;
         }  
         renderer.clear();
         //todo
