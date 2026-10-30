@@ -43,9 +43,10 @@ public:
         return { (int)(x * scale) + width / 2, (int)(-y * scale) + height / 2 };
     }
 
-    Point project(const Point& p) {
-        float sx = p.x/p.z;
-        float sy = p.y/p.z;
+    Point project(const Point& p, float camera_dist = 1.0f) {
+        float depth = p.z + camera_dist;
+        float sx = p.x/depth;
+        float sy = p.y/depth;
         return {sx,sy};
     }
 
