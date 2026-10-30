@@ -14,9 +14,10 @@ int main() {
             if (e.type == SDL_QUIT) running = false;
         }  
         r.clear();
-        SDL_Point p = r.to_screen(1.0f, 1.0f);
+        Point p2d = r.project({0.0f, 0.0f, 1.0f});
+        SDL_Point p = r.to_screen(p2d.x, p2d.y);
         //std::cout << p.x << p.y << std::endl;
-        r.draw_point(p.x, p.y, 20, {255, 255, 255, 255});
+        r.draw_point(p.x, p.y, 20, {0, 255, 0, 255});
         r.present();
     }
     return 0;

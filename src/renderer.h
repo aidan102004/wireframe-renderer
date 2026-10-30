@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include "point.h"
 
 struct Color {
     int r;
@@ -11,8 +12,9 @@ struct Color {
 
 class Renderer {
 private:
-    int width = 800;
-    int height = 800;
+    static constexpr int width = 800;
+    static constexpr int height = 800;
+    static constexpr float SCALE = 400.0f;
     Color COLOR = {0,0,0,0};
 public:
     SDL_Window* window = nullptr;
@@ -37,8 +39,14 @@ public:
         SDL_RenderFillRect(renderer, &rect);
     }
 
-    SDL_Point to_screen(float x, float y, float scale = 200.0f) {
+    SDL_Point to_screen(float x, float y, float scale = SCALE) {
         return { (int)(x * scale) + width / 2, (int)(-y * scale) + height / 2 };
+    }
+
+    Point project(const Point& p) {
+        float sx = p.x/p.z;
+        float sy = p.y/p.z;
+        return {sx,sy};
     }
 
     ~Renderer() {
