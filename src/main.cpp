@@ -1,11 +1,13 @@
 #include <SDL.h>
 #include <cmath>
 #include "renderer.h"
+#include "animator.h"
 #include <iostream>
 #include <functional>
 #include <array>
 
 Renderer r;
+Animator a;
 float angle = 0.0f;
 
 const std::array<Point, 8> vs = {{
@@ -21,8 +23,10 @@ const std::array<Point, 8> vs = {{
 }};
 
 void frame(float delta_time);
-void draw(float x, float y , float z, std::function<Point(float x, float y, float z)> fn);
-Point rotate(float x, float y, float z);
+void draw(float x, float y , float z, std::function<Point(float, float, float)> fn);
+Point rotate_y(float x, float y, float z);
+Point rotate_x(float x, float y, float z);
+Point rotate_z(float x, float y, float z);
 
 int main() {
     r.create_window();
@@ -50,7 +54,9 @@ void frame(float delta_time) {
 
     r.clear();
     for (const auto& v : vs) {
-        draw(v.x, v.y, v.z, rotate);
+    draw(v.x, v.y, v.z, [&](float x, float y, float z) {
+        return a.rotate_y(angle, x, y, z);
+    });
     }
     r.present();
 }
@@ -61,9 +67,3 @@ void draw(float x, float y , float z, std::function<Point(float x, float y, floa
     r.draw_point(p.x, p.y, 20, {0, 255, 0, 255});
 }
 
-Point rotate(float x, float y, float z) {
-    float c = std::cos(angle), s = std::sin(angle);
-    float xp = z * s - x * c;
-    float zp = z * c + x * s;
-    return {xp, y, zp};
-}
