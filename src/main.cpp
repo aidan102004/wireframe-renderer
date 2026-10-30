@@ -2,11 +2,27 @@
 #include <cmath>
 #include "renderer.h"
 #include <iostream>
+#include <functional>
+#include <array>
 
 Renderer r;
 float angle = 0.0f;
 
+const std::array<Point, 8> vs = {{
+    { 0.5f,  0.5f, 0.5f},
+    {-0.5f,  0.5f, 0.5f},
+    { 0.5f, -0.5f, 0.5f},
+    {-0.5f, -0.5f, 0.5f},
+
+    { 0.5f,  0.5f, -0.5f},
+    {-0.5f,  0.5f, -0.5f},
+    { 0.5f, -0.5f, -0.5f},
+    {-0.5f, -0.5f, -0.5f}
+}};
+
 void frame(float delta_time);
+void draw(float x, float y , float z, std::function<Point(float x, float y, float z)> fn);
+Point rotate(float x, float y, float z);
 
 int main() {
     r.create_window();
@@ -24,14 +40,7 @@ int main() {
         float dt = (now - last) /1000.0f;
         last = now;
 
-        dz += 1.0f *dt;
-        r.clear();
-        
-        Point p2d = r.project({1.0f, 0.0f, 1.0f + dz});
-        SDL_Point p = r.to_screen(p2d.x, p2d.y);
-        r.draw_point(p.x, p.y, 20, {0, 255, 0, 255});
-        r.present();
-        //frame(dt);
+        frame(dt);
     }
     return 0;
 }
@@ -39,13 +48,22 @@ int main() {
 void frame(float delta_time) {
     angle += 1.0f * delta_time;
 
-    float c = std::cos(angle), s = std::sin(angle);
-    float x = 0.0f, y = 1.0f, z = 0.0f;
-    float xp = x * c - y * s;
-    float yp = x * s + y * c;
     r.clear();
-    Point p2d = r.project({xp, yp, z});
+    for (const auto& v : vs) {
+        draw(v.x, v.y, v.z, rotate);
+    }
+    r.present();
+}
+
+void draw(float x, float y , float z, std::function<Point(float x, float y, float z)> fn) {
+    Point p2d = r.project(fn(x, y, z));
     SDL_Point p = r.to_screen(p2d.x, p2d.y);
     r.draw_point(p.x, p.y, 20, {0, 255, 0, 255});
-    r.present();
+}
+
+Point rotate(float x, float y, float z) {
+    float c = std::cos(angle), s = std::sin(angle);
+    float xp = z * s - x * c;
+    float zp = z * c + x * s;
+    return {xp, y, zp};
 }
