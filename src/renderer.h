@@ -41,8 +41,8 @@ public:
     }
 
     void draw_line(SDL_Point a, SDL_Point b, Color c) {
-        SDL_SetRenderDrawColor(r.renderer, c.r, c.g, c.b, c.a);
-        SDL_RenderDrawLine(r.renderer, a.x, a.y, b.x, b.y);
+        SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
+        SDL_RenderDrawLine(renderer, a.x, a.y, b.x, b.y);
     }
 
     SDL_Point to_screen(float x, float y, float scale = SCALE) {
