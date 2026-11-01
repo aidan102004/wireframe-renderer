@@ -40,6 +40,11 @@ public:
         SDL_RenderDrawLine(renderer, 100, 100, 700, 500);
     }
 
+    void draw_line(SDL_Point a, SDL_Point b, Color c) {
+        SDL_SetRenderDrawColor(r.renderer, c.r, c.g, c.b, c.a);
+        SDL_RenderDrawLine(r.renderer, a.x, a.y, b.x, b.y);
+    }
+
     SDL_Point to_screen(float x, float y, float scale = SCALE) {
         return { (int)(x * scale) + width / 2, (int)(-y * scale) + height / 2 };
     }

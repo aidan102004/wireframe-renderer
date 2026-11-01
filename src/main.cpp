@@ -28,12 +28,9 @@ const std::array<Point, 8> vs = {{
     {-0.5f, -0.5f, -0.5f}
 }};
 
-void draw_line(SDL_Point a, SDL_Point b, Color c);
 void frame(float delta_time);
 SDL_Point draw(float x, float y , float z, std::function<Point(float, float, float)> fn);
-Point rotate_y(float x, float y, float z);
-Point rotate_x(float x, float y, float z);
-Point rotate_z(float x, float y, float z);
+
 
 int main() {
     r.create_window();
@@ -70,19 +67,13 @@ void frame(float delta_time) {
     r.clear();
 
     for (const auto& [i,j] : vertices) {
-        draw_line(points[i], points[j], {0, 255, 0, 255});
+        r.draw_line(points[i], points[j], {0, 255, 0, 255});
     }
     r.present();
-}
-
-void draw_line(SDL_Point a, SDL_Point b, Color c) {
-    SDL_SetRenderDrawColor(r.renderer, c.r, c.g, c.b, c.a);
-    SDL_RenderDrawLine(r.renderer, a.x, a.y, b.x, b.y);
 }
 
 SDL_Point draw(float x, float y , float z, std::function<Point(float x, float y, float z)> fn) {
     Point p2d = r.project(fn(x, y, z));
     return r.to_screen(p2d.x, p2d.y);
-    //r.draw_point(p.x, p.y, 20, {0, 255, 0, 255});
 }
 
