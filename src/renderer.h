@@ -37,6 +37,7 @@ public:
         SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
         SDL_Rect rect = { x - size / 2, y - size / 2, size, size };
         SDL_RenderFillRect(renderer, &rect);
+        SDL_RenderDrawLine(renderer, 100, 100, 700, 500);
     }
 
     SDL_Point to_screen(float x, float y, float scale = SCALE) {
