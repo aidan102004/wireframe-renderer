@@ -2,31 +2,16 @@
 #include <cmath>
 #include "renderer.h"
 #include "animator.h"
+#include "shape.h"
 #include <iostream>
 #include <functional>
 #include <array>
 
 Renderer r;
 Animator a;
+Shape shape = make_pyramid();
 float angle = 0.0f;
 
-const std::array<std::pair<int,int>, 12> vertices = {{
-    {0,1}, {0,2}, {1,3}, {2,3},   //front face
-    {4,5}, {4,6}, {5,7}, {6,7},   //back face
-    {0,4}, {1,5}, {2,6}, {3,7}    //connecting edges
-}};
-
-const std::array<Point, 8> vs = {{
-    { 0.5f,  0.5f, 0.5f},
-    {-0.5f,  0.5f, 0.5f},
-    { 0.5f, -0.5f, 0.5f},
-    {-0.5f, -0.5f, 0.5f},
-
-    { 0.5f,  0.5f, -0.5f},
-    {-0.5f,  0.5f, -0.5f},
-    { 0.5f, -0.5f, -0.5f},
-    {-0.5f, -0.5f, -0.5f}
-}};
 
 void frame(float delta_time);
 SDL_Point draw(float x, float y , float z, std::function<Point(float, float, float)> fn);
@@ -58,15 +43,15 @@ void frame(float delta_time) {
 
     r.clear();
     std::array<SDL_Point, 8> points;
-    for (size_t i = 0; i < vs.size(); i++) {
-    points[i] = draw(vs[i].x, vs[i].y, vs[i].z, [&](float x, float y, float z) {
+    for (size_t i = 0; i < shape.vertices.size(); i++) {
+        points[i] = draw(shape.vertices[i].x, shape.vertices[i].y, shape.vertices[i].z, [&](float x, float y, float z) {
         return a.rotate_y(angle, x, y, z);
     });
     }
 
     r.clear();
 
-    for (const auto& [i,j] : vertices) {
+    for (const auto& [i,j] : shape.edges) {
         r.draw_line(points[i], points[j], {0, 255, 0, 255});
     }
     r.present();
